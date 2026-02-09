@@ -1,0 +1,168 @@
+{
+  "title": "IIT-JEE Syllabus",
+  "subjects": [
+    {
+      "id": "physics",
+      "name": "Physics",
+      "topics": [
+        {
+          "id": "ph_mechanics",
+          "name": "Mechanics",
+          "subtopics": [
+            {"id": "ph_kinematics", "name": "Kinematics", "weight": 0.08},
+            {"id": "ph_newtons_laws", "name": "Newton's Laws of Motion", "weight": 0.08},
+            {"id": "ph_work_energy", "name": "Work, Energy & Power", "weight": 0.07},
+            {"id": "ph_com_collisions", "name": "Centre of Mass & Collisions", "weight": 0.06},
+            {"id": "ph_rotational", "name": "Rotational Mechanics", "weight": 0.07},
+            {"id": "ph_gravitation", "name": "Gravitation", "weight": 0.05},
+            {"id": "ph_shm", "name": "Simple Harmonic Motion", "weight": 0.05},
+            {"id": "ph_fluid_mechanics", "name": "Fluid Mechanics", "weight": 0.04}
+          ]
+        },
+        {
+          "id": "ph_thermodynamics",
+          "name": "Thermodynamics & Waves",
+          "subtopics": [
+            {"id": "ph_heat_transfer", "name": "Heat & Thermodynamics", "weight": 0.06},
+            {"id": "ph_kinetic_theory", "name": "Kinetic Theory of Gases", "weight": 0.04},
+            {"id": "ph_waves", "name": "Waves & Sound", "weight": 0.05}
+          ]
+        },
+        {
+          "id": "ph_electromagnetism",
+          "name": "Electromagnetism",
+          "subtopics": [
+            {"id": "ph_electrostatics", "name": "Electrostatics", "weight": 0.08},
+            {"id": "ph_current_electricity", "name": "Current Electricity", "weight": 0.06},
+            {"id": "ph_magnetism", "name": "Magnetism & Magnetic Effects", "weight": 0.06},
+            {"id": "ph_emi", "name": "Electromagnetic Induction", "weight": 0.06},
+            {"id": "ph_ac_circuits", "name": "Alternating Current", "weight": 0.04},
+            {"id": "ph_em_waves", "name": "Electromagnetic Waves", "weight": 0.02}
+          ]
+        },
+        {
+          "id": "ph_optics",
+          "name": "Optics & Modern Physics",
+          "subtopics": [
+            {"id": "ph_ray_optics", "name": "Ray Optics", "weight": 0.05},
+            {"id": "ph_wave_optics", "name": "Wave Optics", "weight": 0.04},
+            {"id": "ph_modern_physics", "name": "Modern Physics (Photoelectric, Atoms, Nuclei)", "weight": 0.06},
+            {"id": "ph_semiconductors", "name": "Semiconductors", "weight": 0.02}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chemistry",
+      "name": "Chemistry",
+      "topics": [
+        {
+          "id": "ch_physical",
+          "name": "Physical Chemistry",
+          "subtopics": [
+            {"id": "ch_mole_concept", "name": "Mole Concept & Stoichiometry", "weight": 0.06},
+            {"id": "ch_atomic_structure", "name": "Atomic Structure", "weight": 0.05},
+            {"id": "ch_chemical_bonding", "name": "Chemical Bonding", "weight": 0.06},
+            {"id": "ch_thermodynamics", "name": "Chemical Thermodynamics", "weight": 0.05},
+            {"id": "ch_equilibrium", "name": "Chemical Equilibrium", "weight": 0.05},
+            {"id": "ch_ionic_equilibrium", "name": "Ionic Equilibrium", "weight": 0.05},
+            {"id": "ch_electrochemistry", "name": "Electrochemistry", "weight": 0.05},
+            {"id": "ch_kinetics", "name": "Chemical Kinetics", "weight": 0.05},
+            {"id": "ch_solutions", "name": "Solutions & Colligative Properties", "weight": 0.04},
+            {"id": "ch_solid_state", "name": "Solid State", "weight": 0.03},
+            {"id": "ch_surface_chemistry", "name": "Surface Chemistry", "weight": 0.02}
+          ]
+        },
+        {
+          "id": "ch_organic",
+          "name": "Organic Chemistry",
+          "subtopics": [
+            {"id": "ch_goc", "name": "General Organic Chemistry (GOC)", "weight": 0.07},
+            {"id": "ch_hydrocarbons", "name": "Hydrocarbons", "weight": 0.05},
+            {"id": "ch_halides", "name": "Alkyl & Aryl Halides", "weight": 0.04},
+            {"id": "ch_alcohols_phenols", "name": "Alcohols, Phenols & Ethers", "weight": 0.05},
+            {"id": "ch_aldehydes_ketones", "name": "Aldehydes, Ketones & Carboxylic Acids", "weight": 0.06},
+            {"id": "ch_amines", "name": "Amines", "weight": 0.04},
+            {"id": "ch_biomolecules", "name": "Biomolecules & Polymers", "weight": 0.03}
+          ]
+        },
+        {
+          "id": "ch_inorganic",
+          "name": "Inorganic Chemistry",
+          "subtopics": [
+            {"id": "ch_periodic_table", "name": "Periodic Table & Properties", "weight": 0.05},
+            {"id": "ch_s_block", "name": "s-Block Elements", "weight": 0.03},
+            {"id": "ch_p_block", "name": "p-Block Elements", "weight": 0.07},
+            {"id": "ch_d_block", "name": "d-Block & f-Block Elements", "weight": 0.05},
+            {"id": "ch_coord_compounds", "name": "Coordination Compounds", "weight": 0.05},
+            {"id": "ch_metallurgy", "name": "Metallurgy", "weight": 0.03},
+            {"id": "ch_qualitative_analysis", "name": "Qualitative Analysis", "weight": 0.03}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mathematics",
+      "name": "Mathematics",
+      "topics": [
+        {
+          "id": "ma_algebra",
+          "name": "Algebra",
+          "subtopics": [
+            {"id": "ma_quadratic", "name": "Quadratic Equations & Expressions", "weight": 0.06},
+            {"id": "ma_complex_numbers", "name": "Complex Numbers", "weight": 0.05},
+            {"id": "ma_sequences", "name": "Sequences & Series", "weight": 0.05},
+            {"id": "ma_binomial", "name": "Binomial Theorem", "weight": 0.04},
+            {"id": "ma_permutations", "name": "Permutations & Combinations", "weight": 0.05},
+            {"id": "ma_probability", "name": "Probability", "weight": 0.06},
+            {"id": "ma_matrices", "name": "Matrices & Determinants", "weight": 0.06},
+            {"id": "ma_logarithms", "name": "Logarithms", "weight": 0.02}
+          ]
+        },
+        {
+          "id": "ma_calculus",
+          "name": "Calculus",
+          "subtopics": [
+            {"id": "ma_functions", "name": "Functions", "weight": 0.05},
+            {"id": "ma_limits", "name": "Limits & Continuity", "weight": 0.05},
+            {"id": "ma_differentiation", "name": "Differentiation", "weight": 0.07},
+            {"id": "ma_application_derivatives", "name": "Application of Derivatives", "weight": 0.06},
+            {"id": "ma_integration", "name": "Indefinite Integration", "weight": 0.07},
+            {"id": "ma_definite_integration", "name": "Definite Integration & Area", "weight": 0.07},
+            {"id": "ma_differential_equations", "name": "Differential Equations", "weight": 0.05}
+          ]
+        },
+        {
+          "id": "ma_coordinate",
+          "name": "Coordinate Geometry",
+          "subtopics": [
+            {"id": "ma_straight_lines", "name": "Straight Lines", "weight": 0.05},
+            {"id": "ma_circles", "name": "Circles", "weight": 0.06},
+            {"id": "ma_parabola", "name": "Parabola", "weight": 0.05},
+            {"id": "ma_ellipse", "name": "Ellipse", "weight": 0.04},
+            {"id": "ma_hyperbola", "name": "Hyperbola", "weight": 0.04}
+          ]
+        },
+        {
+          "id": "ma_trigonometry",
+          "name": "Trigonometry",
+          "subtopics": [
+            {"id": "ma_trig_ratios", "name": "Trigonometric Ratios & Identities", "weight": 0.05},
+            {"id": "ma_trig_equations", "name": "Trigonometric Equations", "weight": 0.04},
+            {"id": "ma_inverse_trig", "name": "Inverse Trigonometry", "weight": 0.04},
+            {"id": "ma_properties_triangles", "name": "Properties of Triangles", "weight": 0.03}
+          ]
+        },
+        {
+          "id": "ma_vectors_3d",
+          "name": "Vectors & 3D Geometry",
+          "subtopics": [
+            {"id": "ma_vectors", "name": "Vectors", "weight": 0.05},
+            {"id": "ma_3d_geometry", "name": "3D Geometry", "weight": 0.05}
+          ]
+        }
+      ]
+    }
+  ]
+}
+

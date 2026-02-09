@@ -1,0 +1,44 @@
+services:
+  # --- Backend (PRIVATE — only accessible via Nginx) ---
+  backend:
+    build: .
+    container_name: jee-coach-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - PORT=8001
+      - HOST=0.0.0.0
+      - DEBUG=false
+      - DATABASE_URL=sqlite+aiosqlite:///./db/jee_coach.db
+    volumes:
+      - db_data:/app/db
+    # NOT exposed to host — only reachable from nginx via Docker network
+    expose:
+      - "8001"
+    networks:
+      - internal
+
+  # --- Nginx (PUBLIC — the only internet-facing service) ---
+  nginx:
+    image: nginx:alpine
+    container_name: jee-coach-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/rate_limit.conf:/etc/nginx/conf.d/rate_limit.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - internal
+
+volumes:
+  db_data:
+
+networks:
+  internal:
+    driver: bridge
+
