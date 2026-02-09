@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -12,6 +13,7 @@ from backend.schemas import StudentOnboardRequest, StudentProfile
 from backend.services import mastery_service, plan_service, student_service
 from backend.services.coach_orchestrator import coach
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/student", tags=["student"])
 
 
@@ -50,32 +52,46 @@ async def onboard_student(
     db: AsyncSession = Depends(get_db),
 ) -> dict[str, Any]:
     """Onboard a new student – creates profile and starts initial conversation."""
-    # Save the student profile
-    profile_data = request.model_dump()
-    await student_service.upsert_student(db, student_id, profile_data)
+    try:
+        # Save the student profile
+        profile_data = request.model_dump()
+        await student_service.upsert_student(db, student_id, profile_data)
 
-    # Run an onboarding chat to generate initial plan
-    onboarding_message = (
-        f"Hi! I'm {request.name or 'a student'}. "
-        f"I'm in class {request.grade}, preparing for JEE {request.target_year}. "
-        f"I can study {request.daily_hours} hours daily. "
-    )
-    if request.strengths:
-        onboarding_message += f"My strong topics: {', '.join(request.strengths)}. "
-    if request.weaknesses:
-        onboarding_message += f"I need help with: {', '.join(request.weaknesses)}. "
-    onboarding_message += "Please create a study plan for me."
+        # Run an onboarding chat to generate initial plan
+        onboarding_message = (
+            f"Hi! I'm {request.name or 'a student'}. "
+            f"I'm in class {request.grade}, preparing for JEE {request.target_year}. "
+            f"I can study {request.daily_hours} hours daily. "
+        )
+        if request.strengths:
+            onboarding_message += (
+                f"My strong topics: {', '.join(request.strengths)}. "
+            )
+        if request.weaknesses:
+            onboarding_message += (
+                f"I need help with: {', '.join(request.weaknesses)}. "
+            )
+        onboarding_message += "Please create a study plan for me."
 
-    result = await coach.chat(
-        db=db,
-        student_id=student_id,
-        user_message=onboarding_message,
-        is_onboarding=True,
-    )
+        result = await coach.chat(
+            db=db,
+            student_id=student_id,
+            user_message=onboarding_message,
+            is_onboarding=True,
+        )
 
-    return {
-        "student_id": student_id,
-        "message": "Student onboarded successfully",
-        "coach_response": result["reply"],
-        "plan_summary": result.get("plan_summary"),
-    }
+        return {
+            "student_id": student_id,
+            "message": "Student onboarded successfully",
+            "coach_response": result["reply"],
+            "plan_summary": result.get("plan_summary"),
+        }
+    except ValueError as exc:
+        logger.error("Configuration error during onboarding: %s", exc)
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    except Exception as exc:
+        logger.exception("Unexpected error during onboarding for %s", student_id)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Onboarding failed: {exc}",
+        ) from exc

@@ -39,14 +39,20 @@ class CoachOrchestrator:
     """Manages a conversation with Claude using tool-use."""
 
     def __init__(self) -> None:
-        self._client: anthropic.Anthropic | None = None
+        self._client: anthropic.AsyncAnthropic | None = None
         self.model = settings.anthropic_model
 
     @property
-    def client(self) -> anthropic.Anthropic:
-        """Lazily initialize the Anthropic client."""
+    def client(self) -> anthropic.AsyncAnthropic:
+        """Lazily initialize the async Anthropic client."""
         if self._client is None:
-            self._client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
+            api_key = settings.anthropic_api_key
+            if not api_key:
+                raise ValueError(
+                    "ANTHROPIC_API_KEY is not set. "
+                    "Add it to your .env file or environment variables."
+                )
+            self._client = anthropic.AsyncAnthropic(api_key=api_key)
         return self._client
 
     async def chat(
@@ -126,7 +132,7 @@ class CoachOrchestrator:
         for iteration in range(MAX_TOOL_ITERATIONS):
             logger.info(f"Tool loop iteration {iteration + 1}")
 
-            response = self.client.messages.create(
+            response = await self.client.messages.create(
                 model=self.model,
                 max_tokens=4096,
                 system=system_prompt,

@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import logging
+import traceback
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import AsyncGenerator
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from backend.config import settings
@@ -64,6 +65,22 @@ app.include_router(syllabus.router, prefix=api_prefix)
 @app.get(f"{api_prefix}/health")
 async def health() -> dict[str, str]:
     return {"status": "ok", "service": "jee-coach-agent"}
+
+
+# Global exception handler – ensures every error returns valid JSON
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    logger.error(
+        "Unhandled exception on %s %s: %s\n%s",
+        request.method,
+        request.url.path,
+        exc,
+        traceback.format_exc(),
+    )
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Internal server error: {exc}"},
+    )
 
 
 # Serve frontend static files (for local dev; in production Nginx serves these)
