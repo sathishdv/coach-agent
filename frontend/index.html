@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JEE Coach Agent</title>
+
+  <!-- KaTeX for rendering LaTeX math expressions -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
   <style>
     :root {
       --bg: #0f1117;
@@ -235,6 +241,33 @@
     }
 
     .message strong { color: var(--accent); }
+
+    /* KaTeX math styling */
+    .message .katex-display {
+      margin: 12px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 0;
+    }
+
+    .message .katex {
+      font-size: 1.1em;
+      color: var(--text);
+    }
+
+    .message .katex-display > .katex {
+      font-size: 1.2em;
+    }
+
+    .message .katex-html .mord,
+    .message .katex-html .mbin,
+    .message .katex-html .mrel,
+    .message .katex-html .mopen,
+    .message .katex-html .mclose,
+    .message .katex-html .mpunct,
+    .message .katex-html .mop {
+      color: var(--text);
+    }
 
     .typing-indicator {
       display: flex;
@@ -510,12 +543,44 @@
     // --- Rendering ---
 
     function renderMarkdown(text) {
-      // Simple markdown rendering
-      let html = text
-        // Code blocks
-        .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-        // Inline code
-        .replace(/`([^`]+)`/g, '<code>$1</code>')
+      // Step 1: Protect LaTeX and code blocks from markdown processing
+      const placeholders = [];
+      let placeholderIdx = 0;
+
+      function placeholder(content) {
+        const key = `%%PLACEHOLDER_${placeholderIdx++}%%`;
+        placeholders.push({ key, content });
+        return key;
+      }
+
+      // Protect code blocks first
+      let html = text.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) =>
+        placeholder(`<pre><code>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`)
+      );
+
+      // Protect display math: $$...$$ (multiline) and \[...\]
+      html = html.replace(/\$\$([\s\S]*?)\$\$/g, (_, math) =>
+        placeholder(`<span class="math-display">\\[${math}\\]</span>`)
+      );
+      html = html.replace(/\\\[([\s\S]*?)\\\]/g, (_, math) =>
+        placeholder(`<span class="math-display">\\[${math}\\]</span>`)
+      );
+
+      // Protect inline math: $...$ (single line, not $$) and \(...\)
+      html = html.replace(/(?<!\$)\$(?!\$)(.+?)(?<!\$)\$(?!\$)/g, (_, math) =>
+        placeholder(`<span class="math-inline">\\(${math}\\)</span>`)
+      );
+      html = html.replace(/\\\((.+?)\\\)/g, (_, math) =>
+        placeholder(`<span class="math-inline">\\(${math}\\)</span>`)
+      );
+
+      // Protect inline code
+      html = html.replace(/`([^`]+)`/g, (_, code) =>
+        placeholder(`<code>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>`)
+      );
+
+      // Step 2: Standard markdown processing
+      html = html
         // Bold
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         // Italic
@@ -536,7 +601,30 @@
       html = html.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
       html = html.replace(/<\/ul>\s*<ul>/g, '');
 
-      return '<p>' + html + '</p>';
+      html = '<p>' + html + '</p>';
+
+      // Step 3: Restore protected content
+      for (const { key, content } of placeholders) {
+        html = html.replace(key, content);
+      }
+
+      return html;
+    }
+
+    function renderMath(element) {
+      // Use KaTeX auto-render if available
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(element, {
+          delimiters: [
+            { left: '\\[', right: '\\]', display: true },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          throwOnError: false,
+          trust: true,
+        });
+      }
     }
 
     function addMessage(role, text) {
@@ -549,6 +637,8 @@
 
       if (role === 'assistant') {
         div.innerHTML = `<div class="label">JEE Coach</div>${renderMarkdown(text)}`;
+        // Render LaTeX math after inserting into DOM
+        renderMath(div);
       } else {
         div.textContent = text;
       }
