@@ -15,6 +15,6 @@ scripts/
 node_modules/
 .next/
 .ruff_cache/
-*.md
+README.md
 docker-compose.yml
-
+railway.json
